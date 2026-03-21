@@ -15,4 +15,4 @@ Includes physics models, parameter optimization, and API endpoints for running s
 - `optimizer/` → parameter solver and constraints
 - `physics/` → simulation models
 - `services/` → business logic
-- `utils/` → helper functions
+- `utils/` → Make CSV and JSON files
