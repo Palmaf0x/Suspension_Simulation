@@ -1,7 +1,7 @@
 import pandas as pd
 from Suspension_Simulation.analysis.amplitude import *
 # importing the data
-from Suspension_Simulation.optimizer import list_data
+from Suspension_Simulation.optimizer.parameter_solver import list_data
 
 # seperation list of values
 mass_data = []

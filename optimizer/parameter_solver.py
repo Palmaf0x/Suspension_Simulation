@@ -1,9 +1,7 @@
 # importing module 
-from Suspension_Simulation.api import response
+from Suspension_Simulation.api.routes import response
 from Suspension_Simulation.optimizer.regime_constraints import *
 import numpy as np
-
-# sample of response
 
 # sample calculatiuon 
 def parameter_solver_one(response) :

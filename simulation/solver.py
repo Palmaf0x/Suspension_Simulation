@@ -1,5 +1,5 @@
 import matplotlib
-from Suspension_Simulation.physics import plotting_data
+from Suspension_Simulation.physics.equations import plotting_data
 import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation
 matplotlib.use('TkAgg')

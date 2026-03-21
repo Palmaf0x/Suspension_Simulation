@@ -1,7 +1,10 @@
 # import module
-
-#
+import numpy as np
+from Suspension_Simulation.optimizer.parameter_solver import list_data
+from Suspension_Simulation.api.routes import response
+# take the first sample
 system_parameters = list_data[0]
+
 # function to define the equation
 def equation_sous_regime(tuple, pos, speed) : 
     # computing of delta and zelta
