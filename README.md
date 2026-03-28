@@ -16,3 +16,9 @@ Includes physics models, parameter optimization, and API endpoints for running s
 - `physics/` → simulation models
 - `services/` → business logic
 - `utils/` → Make CSV and JSON files
+
+## Upcoming work
+- Create the routes for :
+    -   The first demandes user 
+    - The download garph csv
+    - for each simulation wanted in the list dashboard
