@@ -18,7 +18,7 @@ Includes physics models, parameter optimization, and API endpoints for running s
 - `utils/` → Make CSV and JSON files
 
 ## Upcoming work
-- Create the routes for :
+- Create the routes API'S for :
     -   The first demandes user 
     - The download garph csv
     - for each simulation wanted in the list dashboard
