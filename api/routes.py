@@ -1,6 +1,12 @@
+from fastapi import FastAPI
+from pydantic import BaseModel
+
+# creation of the app
+app = FastAPI()
+
 response = {
-    "parameters": [100, 10000, None],
-    "initial_speed" : 10,
-    "initial_position" : 100,
-    "regime_wanted" : "sur"
+    "parameters" : [500, None, None],
+    "initial_position" : 5,
+    "initial_speed" : 2,
+    "regime_wanted" : "sous"
 }
