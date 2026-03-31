@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Apex Dynamics - Simulation</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- Chart.js CDN pour la structure -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body class="simulation-page">
+    <header class="top-bar">
+        <div class="left-section">
+            <div class="mini-logo">Logo</div>
+            <span class="brand-name">Apex Dynamics</span>
+        </div>
+        <button class="btn-download">Download</button>
+    </header>
+
+    <main class="simulation-content">
+        <aside class="sidebar">
+            <a href="config.html" class="btn-back">← back</a>
+        </aside>
+
+        <section class="main-display">
+            <div class="graph-container">
+                <p class="graph-label">graph Chart.JS</p>
+                <canvas id="myChart"></canvas>
+            </div>
+
+            <div class="config-list-section">
+                <h3>List of configuration</h3>
+                <div class="table-responsive">
+                    <table class="config-table">
+                        <thead>
+                            <tr>
+                                <th>m</th>
+                                <th>h</th>
+                                <th>L</th>
+                                <th>Mar.Amp</th>
+                                <th>Times</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Lignes vides pour la structure -->
+                            <tr><td></td><td></td><td></td><td></td><td></td></tr>
+                            <tr><td></td><td></td><td></td><td></td><td></td></tr>
+                            <tr><td></td><td></td><td></td><td></td><td></td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        // Initialisation basique de Chart.js pour montrer la structure
+        const ctx = document.getElementById('myChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+                datasets: [{
+                    label: 'Simulation Data',
+                    data: [12, 19, 3, 5, 2, 3],
+                    borderColor: '#3498db',
+                    tension: 0.1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false
+            }
+        });
+    </script>
+</body>
+</html>
