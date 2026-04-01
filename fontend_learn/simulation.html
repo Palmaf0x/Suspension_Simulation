@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Apex Dynamics - Simulation</title>
-    <link rel="stylesheet" href="style_simulation.css">
+    <link rel="stylesheet" href="style.css">
     <!-- Chart.js CDN pour la structure -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
@@ -53,25 +53,6 @@
         </section>
     </main>
 
-    <script>
-        // Initialisation basique de Chart.js pour montrer la structure
-        const ctx = document.getElementById('myChart').getContext('2d');
-        new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
-                datasets: [{
-                    label: 'Simulation Data',
-                    data: [12, 19, 3, 5, 2, 3],
-                    borderColor: '#3498db',
-                    tension: 0.1
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false
-            }
-        });
-    </script>
+    <script src="apex.js"></script>
 </body>
 </html>
