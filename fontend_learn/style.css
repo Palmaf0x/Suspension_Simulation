@@ -58,19 +58,13 @@ h1:hover {
     align-items: center;
     justify-content: center;
     margin: 10px auto;
-    font-weight: bold;
+    overflow: hidden;
 }
 
-.mini-logo {
-    width: 40px;
-    height: 40px;
-    border: 1px solid var(--text-color);
-    border-radius: 50%;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 0.8rem;
-    margin-right: 10px;
+.logo-placeholder img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
 }
 
 /* Team Section (Accueil) */
@@ -95,8 +89,16 @@ h1:hover {
     display: flex;
     align-items: center;
     justify-content: center;
+    overflow: hidden;
     transition: linear 0.5s;
 }
+
+.avatar-placeholder img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
 .avatar-placeholder:hover {
     width: 102px;
     height: 102px;
@@ -107,8 +109,8 @@ h1:hover {
     width: 120px;
     height: 120px;
     transition: linear 0.5s;
-
 }
+
 .team-member.central .avatar-placeholder:hover {
     width: 122px;
     height: 122px;
@@ -120,19 +122,30 @@ h1:hover {
 }
 
 .team-member li {
+    margin: 8px 0;
+}
+
+.team-member li a {
+    text-decoration: none;
     color: #408A71;
     font-size: 0.9rem;
-    margin: 5px 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
     transition: linear 0.5s;
 }
-.team-member li:hover {
+
+.team-member li a:hover {
     font-size: 1.0rem;
     color: #B0E4CC;
     transition: linear 0.5s;
 }
 
 .logos {
-    width: 0.8rem;
+    width: 20px;
+    height: 20px;
+    object-fit: contain;
     background-color: transparent;
 }
 
@@ -173,240 +186,10 @@ h1:hover {
 .link-secondary:hover {
     color: #408A71;
 }
-/* Page de Chargement */
-.loading-page {
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
-}
-
-.top-bar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 15px 30px;
-    border-bottom: 1px solid var(--border-color);
-    background: var(--white);
-}
-
-.loading-container {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-}
-
-.spinner-dots {
-    position: relative;
-    width: 100px;
-    height: 100px;
-    margin-bottom: 20px;
-}
-
-.dot {
-    position: absolute;
-    width: 8px;
-    height: 8px;
-    background: var(--text-color);
-    border-radius: 50%;
-    animation: pulse 1.2s infinite ease-in-out;
-}
-
-/* Placement des points en cercle */
-.dot:nth-child(1) { top: 0; left: 50%; transform: translateX(-50%); animation-delay: 0s; }
-.dot:nth-child(2) { top: 15%; left: 85%; animation-delay: 0.15s; }
-.dot:nth-child(3) { top: 50%; left: 100%; transform: translateY(-50%); animation-delay: 0.3s; }
-.dot:nth-child(4) { top: 85%; left: 85%; animation-delay: 0.45s; }
-.dot:nth-child(5) { top: 100%; left: 50%; transform: translateX(-50%); animation-delay: 0.6s; }
-.dot:nth-child(6) { top: 85%; left: 15%; animation-delay: 0.75s; }
-.dot:nth-child(7) { top: 50%; left: 0; transform: translateY(-50%); animation-delay: 0.9s; }
-.dot:nth-child(8) { top: 15%; left: 15%; animation-delay: 1.05s; }
-
-@keyframes pulse {
-    0%, 100% { opacity: 0.3; transform: scale(1); }
-    50% { opacity: 1; transform: scale(1.5); }
-}
-
-.loading-text {
-    font-size: 1.2rem;
-    font-weight: 500;
-}
-
-/* Page de Configuration */
-.centered-content {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    min-height: 80vh;
-}
-
-.config-page h2 {
-    margin: 10px 0 30px;
-    color: #408A71;
-}
-
-.config-form {
-    width: 100%;
-    max-width: 400px;
-}
-
-.form-group {
-    margin-bottom: 20px;
-}
-
-.form-group label {
-    display: block;
-    margin-bottom: 5px;
-    font-weight: 500;
-    color: #408A71;
-}
-.form-group input:hover {
-    border: 2px solid #408A71;
-}
-
-.form-group input {
-    width: 100%;
-    padding: 12px;
-    border: 2px solid var(--text-color);
-    border-radius: 15px;
-    color: white;
-    background: transparent;
-}
-
-/* Page de Simulation */
-.simulation-page {
-    display: flex;
-    flex-direction: column;
-    height: 100vh;
-}
-.top-bar {
-    background-color: #091413;
-}
-
-.brand-name {
-    color: #408A71;
-}
-
-.btn-download {
-    padding: 8px 15px;
-    border: 2px solid var(--text-color);
-    background: var(--white);
-    border-radius: 5px;
-    cursor: pointer;
-    display: inline-block;
-    transition: linear 0.5s;
-}
-
-.btn-download:hover {
-    background-color: #408A71;
-    color: #091413;
-    border: 2px solid white;
-    transition: linear 0.5s;
-}
-
-.simulation-content {
-    display: flex;
-    flex: 1;
-}
-
-.sidebar {
-    width: 100px;
-    border-right: 1px solid var(--border-color);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: var(--white);
-}
-
-.btn-back {
-    text-decoration: none;
-    color: var(--text-color);
-    font-weight: bold;
-    transform: rotate(-90deg);
-    white-space: nowrap;
-}
-
-.main-display {
-    flex: 1;
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-}
-
-.graph-container {
-    flex: 2;
-    background: var(--white);
-    border: 2px solid var(--text-color);
-    border-radius: 10px;
-    padding: 20px;
-    position: relative;
-}
-
-.graph-label {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    font-size: 1.5rem;
-    color: #ccc;
-    z-index: 0;
-    pointer-events: none;
-}
-
-.config-list-section {
-    flex: 1;
-}
-
-.config-list-section h3 {
-    margin-bottom: 10px;
-}
-
-.table-responsive {
-    overflow-x: auto;
-}
-
-.config-table {
-    width: 100%;
-    border-collapse: collapse;
-}
-
-.config-table th {
-    border-bottom: 1px solid var(--text-color);
-    padding: 10px;
-    text-align: left;
-}
-
-.config-table td {
-    border-right: 1px solid var(--border-color);
-    padding: 15px;
-    height: 50px;
-}
-
-.config-table td:last-child {
-    border-right: none;
-}
 
 /* Responsive */
 @media (max-width: 768px) {
     .team-grid {
         grid-template-columns: 1fr;
-    }
-
-    .simulation-content {
-        flex-direction: column;
-    }
-
-    .sidebar {
-        width: 100%;
-        height: 50px;
-        border-right: none;
-        border-bottom: 1px solid var(--border-color);
-    }
-
-    .btn-back {
-        transform: none;
     }
 }
