@@ -1,6 +1,45 @@
-response = {
-    "parameters": [100, 10000, None],
-    "initial_speed" : 10,
-    "initial_position" : 100,
-    "regime_wanted" : "sur"
-}
+from fastapi import FastAPI
+from pydantic import BaseModel
+from typing import Optional
+from fastapi.middleware.cors import CORSMiddleware
+# import the functions
+from optimizer.regime_constraints import *
+from optimizer.parameter_solver import *
+from physics.equations import *
+from optimizer.parameter_solver import *
+
+# creation of the app
+app = FastAPI()
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],          # domaines autorisés
+    allow_credentials=True,
+    allow_methods=["*"],            # GET, POST, etc.
+    allow_headers=["*"],            # headers autorisés
+)
+# creation of the data receid model
+class data_format(BaseModel):
+    parameters: Optional[list] = None
+    initial_speed: Optional[float] = None
+    initial_position: Optional[float] = None
+    regime_wanted: str
+# creation of the dictionry to send
+data_plotting = {}
+@app.post("/send_data")
+def send_data(data_received: data_format):
+    response = data_received.dict()
+    print(response)
+    list_data = parameter_solver(response)
+    system_parameters = list_data[0]
+    plotting_data = equation_finder(response, system_parameters)
+    data_plotting["x_values"] = plotting_data[0]
+    data_plotting["y_values"] = plotting_data[1]
+    print(data_plotting)
+    return {"message": "Data received!!"}
+
+@app.get("/get_data")
+def get_data():
+    return {
+        "x_values": data_plotting["x_values"].tolist(),
+        "y_values": data_plotting["y_values"].tolist(),
+    }
