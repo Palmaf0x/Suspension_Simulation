@@ -3,9 +3,11 @@ from pydantic import BaseModel
 from typing import Optional
 from fastapi.middleware.cors import CORSMiddleware
 # import the functions
-from Suspension_Simulation.optimizer.regime_constraints import *
-from Suspension_Simulation.optimizer.parameter_solver import *
-from Suspension_Simulation.physics.equations import *
+from optimizer.regime_constraints import *
+from optimizer.parameter_solver import *
+from physics.equations import *
+from optimizer.parameter_solver import *
+
 # creation of the app
 app = FastAPI()
 app.add_middleware(
@@ -23,6 +25,19 @@ class data_format(BaseModel):
 
 @app.post("/send_data")
 def send_data(data_received: data_format):
+    response = data_received.dict()
+    print(response)
+    list_data = parameter_solver(response)
+    system_parameters = list_data[0]
+    plotting_data = equation_finder(response, system_parameters)
+    print(plotting_data)
+    return {
+        "x_values" : plotting_data[0].tolist(),
+        "y_values" : plotting_data[1].tolist(),
+    }
 
-    return {"message" : "Data received !!",
-            "data" : data_received}
+data_plotting = send_data
+
+@app.get("/get_data")
+def get_data():
+    return data_plotting

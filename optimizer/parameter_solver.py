@@ -1,6 +1,5 @@
 # importing module 
-from Suspension_Simulation.api.routes import response
-from Suspension_Simulation.optimizer.regime_constraints import *
+from optimizer.regime_constraints import *
 import numpy as np
 
 # sample calculatiuon 
@@ -58,6 +57,5 @@ def parameter_solver(response) :
     elif unknow_counter == 2 : 
         return parameter_solver_one(response)
            
-list_data = parameter_solver(response)
-print(list_data)
+
 

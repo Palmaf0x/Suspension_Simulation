@@ -28,8 +28,9 @@ async function send_data() {
         }),
     })
     let response = await data.json()
-    console.log(response)
+    return response;
 }
+
 // function to check for error
 async function CheckAll(event) {
     event.preventDefault();
@@ -37,40 +38,24 @@ async function CheckAll(event) {
     if (mass.value === "" && raideur.value === "" && send_btn.value === "") {
         alert("You must define at least one parameters");
     }
-    else if (init_position.value === "" && init_speed.value === "" && regime.value === "") {
+    else if (init_position.value === "" && init_speed.value === "") {
         alert("You must define the initial position and initial speed")
     }
-    else {
-        await send_data()
+    else if(regime.value === "") {
+        alert("You must choose your regime wanted")
     }
-    window.location.href = "simulation.html";
+    else {
+        let response = await send_data()
+        let x_values = response["x_values"];
+        let y_values = response["y_values"];
+        window.location.href = "simulation.html"
+        return {
+            x_values: x_values,
+            y_values: y_values,
+        };
+    }
 }
 
 // add the event listener
 send_btn.addEventListener("click", CheckAll);
 
-
-
-
-
-
-
-
-
-const ctx = document.getElementById('myChart').getContext('2d');
-        new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
-                datasets: [{
-                    label: 'Simulation Data',
-                    data: [12, 19, 3, 5, 2, 3],
-                    borderColor: '#408A71',
-                    tension: 0.1
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false
-            }
-        });

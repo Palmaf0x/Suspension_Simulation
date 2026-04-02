@@ -45,9 +45,9 @@
                     <label for="regime">regime wanted</label>
                     <select id="regime" class="custom-select">
                         <option value="" disabled selected>Select regime...</option>
-                        <option value="aperiodic">Apériodique</option>
-                        <option value="critical">Critique</option>
-                        <option value="pseudoperiodic">Pseudo-périodique</option>
+                        <option value="sous">Underdamped</option>
+                        <option value="critique">Critically damped</option>
+                        <option value="sur">Overdamped</option>
                     </select>
                 </div>
             </div>
@@ -55,6 +55,6 @@
             <button class="btn-primary" id="send_btn" type="button">Simulation -></button>
         </form>
     </div>
-    <script src="apex.js"></script>
+    <script src="apex.js" type="module"></script>
 </body>
 </html>
