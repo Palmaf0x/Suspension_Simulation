@@ -17,12 +17,14 @@ app.add_middleware(
     allow_methods=["*"],            # GET, POST, etc.
     allow_headers=["*"],            # headers autorisés
 )
+# creation of the data receid model
 class data_format(BaseModel):
     parameters: Optional[list] = None
     initial_speed: Optional[float] = None
     initial_position: Optional[float] = None
     regime_wanted: str
-
+# creation of the dictionry to send
+data_plotting = {}
 @app.post("/send_data")
 def send_data(data_received: data_format):
     response = data_received.dict()
@@ -30,14 +32,14 @@ def send_data(data_received: data_format):
     list_data = parameter_solver(response)
     system_parameters = list_data[0]
     plotting_data = equation_finder(response, system_parameters)
-    print(plotting_data)
-    return {
-        "x_values" : plotting_data[0].tolist(),
-        "y_values" : plotting_data[1].tolist(),
-    }
-
-data_plotting = send_data
+    data_plotting["x_values"] = plotting_data[0]
+    data_plotting["y_values"] = plotting_data[1]
+    print(data_plotting)
+    return {"message": "Data received!!"}
 
 @app.get("/get_data")
 def get_data():
-    return data_plotting
+    return {
+        "x_values": data_plotting["x_values"].tolist(),
+        "y_values": data_plotting["y_values"].tolist(),
+    }
