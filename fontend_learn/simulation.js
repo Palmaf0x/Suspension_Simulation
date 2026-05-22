@@ -29,3 +29,12 @@ function createChart(x, y) {
 
 // call the function ones my page load
 get_data()
+
+// get the download button
+let btn = document.getElementById("btn-download")
+
+function csv_dowload(){
+    window.location.href = "http://127.0.0.1:8000/download_csv"
+}
+
+btn.addEventListener("click", csv_dowload)
