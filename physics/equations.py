@@ -1,9 +1,6 @@
 # import module
 import numpy as np
-from Suspension_Simulation.optimizer.parameter_solver import list_data
-from Suspension_Simulation.api.routes import response
 # take the first sample
-system_parameters = list_data[0]
 
 # function to define the equation
 def equation_sous_regime(tuple, pos, speed) : 
@@ -17,7 +14,9 @@ def equation_sous_regime(tuple, pos, speed) :
     B = (speed + delta * pulsation * pos) / zelta
     
     # setting the data
-    t = np.linspace(0, 2*np.pi, 500)
+    settling_time = 4 / (delta * pulsation)
+    t_max = 5 * settling_time
+    t = np.linspace(0, t_max, 1000)
     y = np.exp(-(delta * pulsation * t)) *  ((A * np.cos(zelta*t) + B * np.sin(zelta*t)))
     return t,y
 
@@ -45,8 +44,9 @@ def equation_sur_regime(tuple, pos, speed) :
     # finding the initial values
     r1 = (-pulsation) * (delta + np.sqrt(delta**2 - 1))
     r2 = (-pulsation) * (delta - np.sqrt(delta**2 - 1))
-    A = pos - ((speed-2-pos*r1) / (-r1 + r2))
-    B = -A + pos
+
+    A = (speed - r2 * pos) / (r1 - r2)
+    B = (r1 * pos - speed) / (r1 - r2)
 
     # value to compute
     # approximation time to stop
@@ -67,5 +67,4 @@ def equation_finder(response, system_parameters) :
 
     elif response["regime_wanted"] == "sur" :
         return equation_sur_regime(system_parameters, response["initial_position"], response["initial_speed"])
-    
-plotting_data = equation_finder(response, system_parameters)
+

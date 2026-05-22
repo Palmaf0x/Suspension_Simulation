@@ -24,7 +24,7 @@ anim = FuncAnimation(
     fig= fig,
     func= update,
     frames= len(x),
-    interval = 500,
+    interval = 50,
     repeat=True
 )
 # customisation of the graph
