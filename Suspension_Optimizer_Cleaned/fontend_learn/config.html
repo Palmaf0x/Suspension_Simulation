@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Apex Dynamics - Configuration</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="config-page">
+    <div class="container centered-content">
+        <div class="logo-placeholder">
+            <img src="ApexLogo.png" alt="">
+        </div>
+        <h2>Apex Dynamics</h2>
+
+        <form class="config-form">
+            <div class="form-grid">
+                <!-- Paramètres physiques -->
+                <div class="form-group">
+                    <label for="mass">mass (m)</label>
+                    <input type="text" id="mass" placeholder="Predicted...">
+                </div>
+
+                <div class="form-group">
+                    <label for="raideur">raideur (k)</label>
+                    <input type="text" id="raideur" placeholder="Predicted...">
+                </div>
+
+                <div class="form-group">
+                    <label for="friction">friction (c)</label>
+                    <input type="text" id="friction" placeholder="Predicted...">
+                </div>
+
+                <!-- Conditions initiales -->
+                <div class="form-group">
+                    <label for="init_pos">initial position (x0)</label>
+                    <input type="text" id="init_pos" placeholder="Predicted...">
+                </div>
+
+                <div class="form-group">
+                    <label for="init_speed">initial speed (v0)</label>
+                    <input type="text" id="init_speed" placeholder="Predicted...">
+                </div>
+
+                <!-- Sélection du régime -->
+                <div class="form-group full-width">
+                    <label for="regime">regime wanted</label>
+                    <select id="regime" class="custom-select">
+                        <option value="" disabled selected>Select regime...</option>
+                        <option value="sous">Underdamped</option>
+                        <option value="critique">Critically damped</option>
+                        <option value="sur">Overdamped</option>
+                    </select>
+                </div>
+            </div>
+
+            <button class="btn-primary" id="send_btn" type="button">Simulation -></button>
+        </form>
+    </div>
+    <script src="apex.js" type="module"></script>
+</body>
+</html>

@@ -1,9 +1,9 @@
 import pandas as pd
-# Suspension_Simulation.analysis.amplitude import *
-# importing the data
-#from Suspension_Simulation.optimizer.parameter_solver import list_data
+                                                   
+                    
+                                                                       
 def csv_maker(list_data, list_amplitude, list_time_stop):
-    # seperation list of values
+                               
     mass_data = []
     raideur_data = []
     friction_data = []
@@ -12,7 +12,7 @@ def csv_maker(list_data, list_amplitude, list_time_stop):
         raideur_data.append(data[1])
         friction_data.append(data[2])
 
-    # creation of the dataframe
+                               
     csv_data = {
         "Mass" : mass_data,
         "Raideur" : raideur_data,
