@@ -1,53 +1,58 @@
-# Suspension Simulation
+# Apex Dynamics: Vehicle Suspension Simulator & Parameter Optimizer
 
-A Python application for simulating and optimizing a vehicle suspension model. It includes a FastAPI backend, a browser interface, damping-regime parameter search, and CSV export.
+[![Python](https://img.shields.io/badge/Python-3.10+-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org/)
+[![FastAPI](https://img.shields.io/badge/FastAPI-0.100+-009688?style=for-the-badge&logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com/)
+[![JavaScript](https://img.shields.io/badge/JavaScript-ES6+-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)](https://developer.mozilla.org/)
+[![License](https://img.shields.io/badge/License-MIT-blue?style=for-the-badge)](LICENSE)
 
-## Run locally
+An interactive full-stack telemetry and simulation engine engineered to model quarter-car suspension dynamics, search for valid physical parameters across underdamped, critically damped, and overdamped regimes, and export numerical analyses to CSV.
 
-From the project directory, install the dependencies and start the application:
+---
+
+## 📸 Interface & Previews
+
+<div align="center">
+  <img src="assets/configs.png" alt="Configuration Interface" width="48%" />
+  <img src="assets/Exel_file.png" alt="Plot and Excel Export Data" width="48%" />
+</div>
+
+---
+
+## 🚀 Key Features
+
+* **Dynamic Parameter Solver:** Leaves missing physical parameters (mass $m$, stiffness $k$, damping $c$) unspecified and automatically searches configured ranges for valid regime configurations.
+* **Physics Simulation Engine:** Solves second-order linear differential equations modeling spring-damper dynamics across three regimes:
+    * `sous` (Underdamped)
+    * `critique` (Critically Damped)
+    * `sur` (Overdamped)
+* **Real-Time Data Visualization:** Serves computed time-domain displacement and velocity vectors directly to a dynamic browser-based UI.
+* **Analytical CSV Export:** Calculates damping amplitudes and settle times across parameter combinations for offline processing.
+
+---
+
+## 🛠️ System Architecture & Tech Stack
+
+* **Frontend:** HTML5, CSS3, JavaScript (Fetch API, Chart.js)
+* **Backend:** FastAPI, Pydantic, Uvicorn
+* **Data Processing:** NumPy, SciPy, Pandas
+
+---
+
+## 💻 Local Setup & Execution
+
+### Prerequisites
+* Python 3.10+ installed
+
+### 1. Clone & Set Up Environment
 
 ```bash
-python3 -m venv .venv
+git clone [https://github.com/Palmaf0x/Suspension_Simulation.git](https://github.com/Palmaf0x/Suspension_Simulation.git)
+cd Suspension_Simulation
+
+# Create and activate virtual environment
+python -m venv .venv
+
+# On Linux/macOS:
 source .venv/bin/activate
-pip install -r requirements.txt
-uvicorn main:app --reload
-```
-
-Open [http://127.0.0.1:8000/](http://127.0.0.1:8000/) in a browser. The configuration page accepts mass, stiffness, damping, initial position, initial speed, and the requested regime. At least one of the three physical parameters may be left blank; the solver searches the configured ranges for valid combinations.
-
-## API endpoints
-
-| Endpoint | Method | Purpose |
-|---|---:|---|
-| `/health` | GET | Check that the service is running. |
-| `/send_data` | POST | Run a simulation and return chart data. |
-| `/get_data` | GET | Retrieve the most recent simulation series. |
-| `/download_csv` | GET | Download candidate parameters, amplitudes, and stop times as CSV. |
-
-Example request body:
-
-```json
-{
-  "parameters": [300, 30000, 3000],
-  "initial_speed": 0,
-  "initial_position": 0.1,
-  "regime_wanted": "sous"
-}
-```
-
-The supported regimes are `sous` for underdamped, `critique` for critically damped, and `sur` for overdamped behavior.
-
-## Project structure
-
-| Directory | Responsibility |
-|---|---|
-| `physics/` | Numerical suspension equations. |
-| `optimizer/` | Parameter validation and regime-constrained search. |
-| `analysis/` | Amplitude and time-stop calculations for export. |
-| `api/` | FastAPI routes and request models. |
-| `fontend_learn/` | Static browser interface and chart scripts. |
-| `utils/` | CSV formatting helpers. |
-
-## Validation
-
-The repository includes `smoke_test.py` and `validate_project.py`. Run them with `python3 smoke_test.py` and `python3 validate_project.py` to check imports, numerical paths, all damping regimes, API responses, and CSV export.
+# On Windows (PowerShell):
+# .venv\Scripts\Activate.ps1
