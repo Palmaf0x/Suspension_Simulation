@@ -1,131 +1,73 @@
-# importing module 
-import numpy as np 
+from __future__ import annotations
 
-# function to sort the good regime 
-def computing_one_mass(a,x,y, nature) :
-    # creation of the combination
-        X,Y = np.meshgrid(x, y)
-        # computing the calculs 
-        delta = Y / (2 * np.sqrt(X * a))
-        good_list = []
-        # condition base on np
-        if nature == "sous" :
-            detector = delta < 1
-        elif nature == "critique" :
-            detector = delta == 1
-        elif nature == "sur" :
-            detector = delta > 1
-        
-        good = np.where(detector)
-        for i, j in zip(good[0], good[1]) :
-            good_list.append((a, X[i,j], Y[i,j]))
-        return good_list
-    
-def computing_one_raider(a,x,y, nature) :
-    # creation of the combination
-        X,Y = np.meshgrid(x, y)
-        # computing the calculs 
-        delta = Y / (2 * np.sqrt(a * X))
-        good_list = []
-        # condition base on np
-        if nature == "sous" :
-            detector = delta < 1
-        elif nature == "critique" :
-            detector = delta == 1
-        elif nature == "sur" :
-            detector = delta > 1
-        
-        good = np.where(detector)
-        for i, j in zip(good[0], good[1]) :
-            good_list.append((a, X[i,j], Y[i,j]))
-        return good_list
+from itertools import product
+from numbers import Real
 
-def computing_one_friction(a,x,y, nature) :
-    # creation of the combination
-        X,Y = np.meshgrid(x, y)
-        # computing the calculs 
-        delta = a / (2 * np.sqrt(X * Y))
-        good_list = []
-        # condition base on np
-        if nature == "sous" :
-            detector = delta < 1
-        elif nature == "critique" :
-            detector = delta == 1
-        elif nature == "sur" :
-            detector = delta > 1
-        
-        good = np.where(detector)
-        for i, j in zip(good[0], good[1]) :
-            good_list.append((a, X[i,j], Y[i,j]))
-        return good_list
-    
-def computing_two_friction(m, k, c, nature) :
-    good_list = []
-    for x in c :
-        delta = c / (2 * np.sqrt(k*m))
-        if delta < 1 and nature == "sous" :
-            good_list.append((m, k, c))
-        elif delta == 1 and nature == "critique" : 
-            good_list.append((m, k, c))
-        elif delta > 1 and nature == "sur" :
-            good_list.append((m, k, c))
-    return good_list
-
-def computing_two_raideur(m, k, c, nature) :
-    good_list = []
-    for x in k :
-        delta = c / (2 * np.sqrt(k*m))
-        if delta < 1 and nature == "sous" :
-            good_list.append((m, k, c))
-        elif delta == 1 and nature == "critique" : 
-            good_list.append((m, k, c))
-        elif delta > 1 and nature == "sur" :
-            good_list.append((m, k, c))
-    return good_list
-
-def computing_two_mass(m, k, c, nature) :
-    good_list = []
-    for x in m :
-        delta = c / (2 * np.sqrt(k*m))
-        if delta < 1 and nature == "sous" :
-            good_list.append((m, k, c))
-        elif delta == 1 and nature == "critique" : 
-            good_list.append((m, k, c))
-        elif delta > 1 and nature == "sur" :
-            good_list.append((m, k, c))
-    return good_list
-
-def computing_three(m, k, c, nature) :
-    good_list = []
-    # computuing simple delta 
-    delta = c / (2 * np.sqrt(k*m))
-    if delta < 1 and nature == "sous" :
-        good_list.append((m, k, c))
-    elif delta == 1 and nature == "critique" : 
-        good_list.append((m, k, c))
-    elif delta > 1 and nature == "sur" :
-        good_list.append((m, k, c))
-    return good_list
-
-def regime_contraintes(m, k, c, nature) :
-    if isinstance(m, (int, float)) :
-        return computing_one_mass(m, k, c, nature) 
-    
-    elif isinstance(k, (int, float)) :
-        return computing_one_raider(k, m, c, nature)
-    
-    elif isinstance(c, (int, float)) :
-        return computing_one_friction(c, m, k, nature)
-    
-    elif isinstance(m, (int,float)) and isinstance(k, (int,float)) :
-        return computing_two_friction(m, k, c, nature)
-    
-    elif isinstance(m, (int,float)) and isinstance(c, (int,float)) :
-        return computing_two_raideur(m, k, c, nature)
-    
-    elif isinstance(k, (int,float)) and isinstance(c, (int,float)) :
-        return computing_two_mass(m, k, c, nature)
-    elif isinstance(k, (int,float)) and isinstance(c, (int,float)) and isinstance(m, (int, float)) :
-        return computing_three(m, k, c, nature)
+import numpy as np
 
 
+VALID_REGIMES = {"sous", "critique", "sur"}
+
+
+def _values(value):
+    """Return a one-dimensional iterable for either a scalar or an array-like."""
+    if isinstance(value, Real) and not isinstance(value, bool):
+        return [float(value)]
+    array = np.asarray(value, dtype=float).reshape(-1)
+    return array.tolist()
+
+
+def _matches(delta: float, nature: str) -> bool:
+    if nature not in VALID_REGIMES:
+        raise ValueError(f"Unknown regime '{nature}'. Use sous, critique, or sur.")
+    if nature == "sous":
+        return delta < 1.0
+    if nature == "sur":
+        return delta > 1.0
+    return bool(np.isclose(delta, 1.0, rtol=1e-6, atol=1e-8))
+
+
+def regime_contraintes(m, k, c, nature: str):
+    """Return all positive (mass, stiffness, damping) combinations in a regime."""
+    if nature not in VALID_REGIMES:
+        raise ValueError(f"Unknown regime '{nature}'. Use sous, critique, or sur.")
+
+    masses, stiffnesses, dampings = _values(m), _values(k), _values(c)
+    if any(value <= 0 for value in masses + stiffnesses + dampings):
+        raise ValueError("Mass, stiffness, and damping values must be positive.")
+
+    result = []
+    for mass, stiffness, damping in product(masses, stiffnesses, dampings):
+        delta = damping / (2.0 * np.sqrt(mass * stiffness))
+        if _matches(delta, nature):
+            result.append((mass, stiffness, damping))
+    return result
+
+
+# Backward-compatible helpers retained for callers from the original project.
+def computing_one_mass(a, x, y, nature):
+    return regime_contraintes(a, x, y, nature)
+
+
+def computing_one_raider(a, x, y, nature):
+    return regime_contraintes(x, a, y, nature)
+
+
+def computing_one_friction(a, x, y, nature):
+    return regime_contraintes(x, y, a, nature)
+
+
+def computing_two_friction(m, k, c, nature):
+    return regime_contraintes(m, k, c, nature)
+
+
+def computing_two_raideur(m, k, c, nature):
+    return regime_contraintes(m, k, c, nature)
+
+
+def computing_two_mass(m, k, c, nature):
+    return regime_contraintes(m, k, c, nature)
+
+
+def computing_three(m, k, c, nature):
+    return regime_contraintes(m, k, c, nature)

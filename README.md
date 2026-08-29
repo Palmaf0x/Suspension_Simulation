@@ -1,62 +1,53 @@
-Suspension Simulation
+# Suspension Simulation
 
-A Python-based system for simulating and optimizing vehicle suspension dynamics.
-This project models suspension physics, runs parameter optimization, and exposes an API to execute simulations programmatically.
+A Python application for simulating and optimizing a vehicle suspension model. It includes a FastAPI backend, a browser interface, damping-regime parameter search, and CSV export.
 
-✅ Project Status
-Completed
-The system is fully functional and ready to use.
+## Run locally
 
-✔ Physics simulation engine implemented  
-✔ Optimization system with constraints  
-✔ API layer for running simulations  
-✔ Modular and maintainable architecture
+From the project directory, install the dependencies and start the application:
 
-
-🌐 Web Version (Coming Soon)
-A hosted web interface is currently in development.
-Soon, users will be able to:
-
-Run simulations directly in the browser  
-Visualize results interactively  
-Download generated data
-
-For now, the project is available for local use only.
-
-💻 Local Usage
-Clone the repository and run it locally:
-git clone <your-repo-url>
-cd suspension-simulation
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
 pip install -r requirements.txt
-python main.py
-(Adjust entry point if needed.)
+uvicorn main:app --reload
+```
 
-⚙️ Features
+Open [http://127.0.0.1:8000/](http://127.0.0.1:8000/) in a browser. The configuration page accepts mass, stiffness, damping, initial position, initial speed, and the requested regime. At least one of the three physical parameters may be left blank; the solver searches the configured ranges for valid combinations.
 
-Suspension physics simulation (deterministic models)
-Parameter optimization with constraints
-API endpoints for simulation execution
-Data export (CSV / JSON)
-Modular system design
+## API endpoints
 
+| Endpoint | Method | Purpose |
+|---|---:|---|
+| `/health` | GET | Check that the service is running. |
+| `/send_data` | POST | Run a simulation and return chart data. |
+| `/get_data` | GET | Retrieve the most recent simulation series. |
+| `/download_csv` | GET | Download candidate parameters, amplitudes, and stop times as CSV. |
 
-🧱 Architecture
+Example request body:
 
-The project is organized for scalability and clarity:
-api/ → API routes (entry points)
-physics/ → core simulation models
-optimizer/ → parameter solving & constraints
-services/ → orchestration & business logic
-analysis/ → data processing & evaluation
-utils/ → helpers (CSV / JSON generation)
+```json
+{
+  "parameters": [300, 30000, 3000],
+  "initial_speed": 0,
+  "initial_position": 0.1,
+  "regime_wanted": "sous"
+}
+```
 
+The supported regimes are `sous` for underdamped, `critique` for critically damped, and `sur` for overdamped behavior.
 
-🚀 Next Steps
+## Project structure
 
-Deploy web interface  
-Add real-time visualization  
-Improve solver performance under high load  
-Extend physics models (non-linear systems, damping complexity)
+| Directory | Responsibility |
+|---|---|
+| `physics/` | Numerical suspension equations. |
+| `optimizer/` | Parameter validation and regime-constrained search. |
+| `analysis/` | Amplitude and time-stop calculations for export. |
+| `api/` | FastAPI routes and request models. |
+| `fontend_learn/` | Static browser interface and chart scripts. |
+| `utils/` | CSV formatting helpers. |
 
-🤝 Contribution
-Contributions, feedback, and suggestions are welcome.
+## Validation
+
+The repository includes `smoke_test.py` and `validate_project.py`. Run them with `python3 smoke_test.py` and `python3 validate_project.py` to check imports, numerical paths, all damping regimes, API responses, and CSV export.
