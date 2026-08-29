@@ -1,40 +1,43 @@
-// creation of the function to get my datas
-async function get_data() {
-    let res = await fetch("http://127.0.0.1:8000/get_data")
-    let result = await res.json()
-
-    let x = result.x_values
-    let y = result.y_values
-
-    console.log(x, y)
-
-    createChart(x, y)
+async function getData() {
+  const response = await fetch("/get_data");
+  const result = await response.json();
+  if (!response.ok) throw new Error(result.detail || "No simulation data available.");
+  createChart(result.x_values, result.y_values);
 }
-// function to mahe the graph
+
 function createChart(x, y) {
-    const graph = document.getElementById("myChart")
-
-    new Chart(graph, {
-        type: "line",
-        data: {
-            labels: x,
-            datasets: [{
-                label: "Simulation",
-                data: y,
-                borderWidth: 2
-            }]
-        }
-    })
+  const graph = document.getElementById("myChart");
+  new Chart(graph, {
+    type: "line",
+    data: {
+      labels: x,
+      datasets: [{
+        label: "Displacement",
+        data: y,
+        borderWidth: 2,
+        pointRadius: 0,
+        borderColor: "#2563eb",
+        tension: 0.15,
+      }],
+    },
+    options: {
+      responsive: true,
+      scales: {
+        x: { title: { display: true, text: "Time (s)" } },
+        y: { title: { display: true, text: "Displacement" } },
+      },
+    },
+  });
 }
 
-// call the function ones my page load
-get_data()
+const downloadButton = document.getElementById("btn-download");
+downloadButton?.addEventListener("click", () => {
+  window.location.href = "/download_csv";
+});
 
-// get the download button
-let btn = document.getElementById("btn-download")
-
-function csv_dowload(){
-    window.location.href = "http://127.0.0.1:8000/download_csv"
-}
-
-btn.addEventListener("click", csv_dowload)
+getData().catch((error) => {
+  const message = document.createElement("p");
+  message.textContent = error.message;
+  message.className = "error-message";
+  document.querySelector("main")?.prepend(message);
+});

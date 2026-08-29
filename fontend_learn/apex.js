@@ -1,61 +1,60 @@
-// get the document variables
-let mass = document.getElementById("mass");
-let friction = document.getElementById("friction");
-let raideur = document.getElementById("raideur");
-let send_btn = document.getElementById("send_btn");
-let init_speed = document.getElementById("init_speed");
-let init_position = document.getElementById("init_pos");
-let regime = document.getElementById("regime");
-// creation of the functions
+const API_BASE = "";
+const mass = document.getElementById("mass");
+const friction = document.getElementById("friction");
+const raideur = document.getElementById("raideur");
+const sendBtn = document.getElementById("send_btn");
+const initSpeed = document.getElementById("init_speed");
+const initPosition = document.getElementById("init_pos");
+const regime = document.getElementById("regime");
+
 function toNumberOrNull(value) {
-  if (value === "") return null;
-
-  const num = parseFloat(value);
-  return isNaN(num) ? null : num;
-}
-// function to send data via API
-async function send_data() {
-    let data = await fetch("http://127.0.0.1:8000/send_data", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-            parameters: [toNumberOrNull(mass.value), toNumberOrNull(friction.value), toNumberOrNull(raideur.value)],
-            initial_speed: toNumberOrNull(init_speed.value),
-            initial_position: toNumberOrNull(init_position.value),
-            regime_wanted: regime.value
-        }),
-    })
-    let response = await data.json()
-    return response;
+  if (value.trim() === "") return null;
+  const number = Number(value);
+  return Number.isFinite(number) ? number : null;
 }
 
-// function to check for error
-async function CheckAll(event) {
-    event.preventDefault();
-
-    if (mass.value === "" && raideur.value === "" && send_btn.value === "") {
-        alert("You must define at least one parameters");
-    }
-    else if (init_position.value === "" && init_speed.value === "") {
-        alert("You must define the initial position and initial speed")
-    }
-    else if(regime.value === "") {
-        alert("You must choose your regime wanted")
-    }
-    else {
-        let response = await send_data()
-        let x_values = response["x_values"];
-        let y_values = response["y_values"];
-        window.location.href = "simulation.html"
-        return {
-            x_values: x_values,
-            y_values: y_values,
-        };
-    }
+async function sendData(payload) {
+  const response = await fetch(`${API_BASE}/send_data`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload),
+  });
+  const body = await response.json();
+  if (!response.ok) throw new Error(body.detail || "Simulation failed.");
+  return body;
 }
 
-// add the event listener
-send_btn.addEventListener("click", CheckAll);
+async function checkAll(event) {
+  event.preventDefault();
+  const parameters = [mass, raideur, friction].map((input) => toNumberOrNull(input.value));
+  if (parameters.every((value) => value === null)) {
+    alert("Define at least one physical parameter.");
+    return;
+  }
+  if (toNumberOrNull(initPosition.value) === null && toNumberOrNull(initSpeed.value) === null) {
+    alert("Define an initial position or initial speed.");
+    return;
+  }
+  if (!regime.value) {
+    alert("Choose the requested damping regime.");
+    return;
+  }
+
+  sendBtn.disabled = true;
+  try {
+    await sendData({
+      parameters,
+      initial_speed: toNumberOrNull(initSpeed.value),
+      initial_position: toNumberOrNull(initPosition.value),
+      regime_wanted: regime.value,
+    });
+    window.location.href = "simulation.html";
+  } catch (error) {
+    alert(error.message);
+  } finally {
+    sendBtn.disabled = false;
+  }
+}
+
+sendBtn.addEventListener("click", checkAll);
 
